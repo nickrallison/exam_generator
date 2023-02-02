@@ -1,19 +1,21 @@
-use std::fs;
-use regex::Regex;
-mod question_parser;
+use tex_modulator::make_latex_file;
+
+mod tex_modulator;
 
 // TODO
-// Format into library export
 // Better Documentation & Uses
 // Better panic checks
 // Auto build TeX pdf
 // Question ID calculation
 // Unique exam specifier
+// Credit Latex Templates
+// Sort Questions
+// Deal with multipart questions
 
 
 
 fn main() {
     let path_to_questions = "text/q.txt".to_string();
-    let questions = question_parser::parse_questions(path_to_questions);
+    make_latex_file("tex/out.tex".to_string(), "tex/template_1.tex".to_string(), path_to_questions);
     
 }

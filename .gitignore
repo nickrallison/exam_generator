@@ -1,3 +1,6 @@
 /target
 
 *.png
+*.pdf
+*.log
+*.aux

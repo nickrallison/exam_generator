@@ -9,7 +9,7 @@ Source: Halliday_ch21q1
 Class: Introdction to Electromagnetics
 Course Code: PHYS 259
 Section: Coulomb's Law
-Text: Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to (a) the magnitude of the charge transferred during touching and (b)
+Text: Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to (a) the magnitude of the charge transferred during touching and (b)  the charge left on the positively charged sphere, greatest first.
 ID: 1
 Images: 1
 Source: Halliday_ch21q2

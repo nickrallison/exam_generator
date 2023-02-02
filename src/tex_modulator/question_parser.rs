@@ -16,7 +16,6 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
     for line in contents.lines() {
         
 	    if let Some(c) = regex.captures(line) {
-	        println!("Key: {}, Val = {}", &c["key"], &c["val"]);
             let key = &c["key"];
             match &c["key"] {
                 "Class" => question.class = (c["val"]).to_string(),
@@ -25,7 +24,8 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
                 "ID" => question.id = (c["val"]).to_string().parse::<u32>().unwrap(),
                 "Images" => question.image_number = (c["val"]).to_string().parse::<u32>().unwrap(),
                 "Source" => question.source = (c["val"]).to_string(),
-                _ => panic!("Invalid Specifier: {}, at line {}\nDoes not match one of: Class, Section, Text, ID, Images or Source", key, line_num+1),
+                "Course Code" => question.code =  (c["val"]).to_string(),
+                _ => panic!("Invalid Specifier: {}, at line {}\nDoes not match one of: Class, Course Code, Section, Text, ID, Images or Source", key, line_num+1),
             }
         }
         else {
@@ -34,18 +34,20 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
         }
         line_num += 1;
 	}
+    question_vec.push(question.clone());
 
     return question_vec;
 }
 
 #[derive(Default, Clone)]
 pub struct Question {
-    class: String,
-    section: String,
-    text: String,
-    source: String,
-    id: u32,
-    image_number: u32,
+    pub class: String,
+    pub code: String,
+    pub section: String,
+    pub text: String,
+    pub source: String,
+    pub id: u32,
+    pub image_number: u32,
 }   
 
 
