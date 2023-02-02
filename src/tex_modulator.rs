@@ -13,11 +13,12 @@ pub fn make_latex_file(tex_out_path: String, tex_template_path: String, question
     .expect("Should have been able to read the question input text file");
     let questions = question_parser::parse_questions(questions_path);
     let mut questions_tex: String = "".to_string();
+    println!("{}", questions.len());
     for question in questions {
         questions_tex.push_str("\\addpoints\n");
         questions_tex.push_str("\\question[10] ");
         questions_tex.push_str(&(question.text));
-        if (question.image_number > 0) {
+        if question.image_number > 0 {
             /*
             \begin{figure}[H]
             \centering
@@ -33,6 +34,7 @@ pub fn make_latex_file(tex_out_path: String, tex_template_path: String, question
             questions_tex.push_str("\\end{figure}");
         }
         questions_tex.push_str("\n\\newpage\n");
+        questions_tex.push_str("\n");
     }
     let tex_out = str::replace(&tex_string, "~", &questions_tex);
     fs::write(tex_out_path, tex_out).expect("Unable to write file");

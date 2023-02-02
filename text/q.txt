@@ -13,3 +13,27 @@ Text: Figure 21-12 shows three pairs of identical spheres that are to be touched
 ID: 1
 Images: 1
 Source: Halliday_ch21q2
+~
+Class: Introdction to Electromagnetics
+Course Code: PHYS 259
+Section: Coulomb's Law
+Text: Figure 21-13 shows four situations in which charged particles are fixed in place on an axis. In which situations is there a point to the left of the particles where an electron will be in equilibrium?
+ID: 2
+Images: 1
+Source: Halliday_ch21q3
+~
+Class: Introdction to Electromagnetics
+Course Code: PHYS 259
+Section: Coulomb's Law
+Text: Figure 21-14 shows two charged particles on an axis. The charges are free to move. However, a third charged particle can be placed at a certain point such that all three particles are then in equilibrium. (a) Is that point to the left of the first two particles, to their right, or between them? (b) Should the third particle be positively or negatively charged? (c)  Is the equilibrium stable or unstable?
+ID: 3
+Images: 1
+Source: Halliday_ch21q4
+~
+Class: Introdction to Electromagnetics
+Course Code: PHYS 259
+Section: Coulomb's Law
+Text: In Fig. 21-15, a central particle of charge -q is surrounded by two circular rings of charged particles. What are the magnitude and direction of the net electrostatic force on the central particle due to the other particles? (Hint - Consider symmetry.)
+ID: 4
+Images: 1
+Source: Halliday_ch21q5

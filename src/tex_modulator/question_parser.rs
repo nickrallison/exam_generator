@@ -17,6 +17,7 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
         
 	    if let Some(c) = regex.captures(line) {
             let key = &c["key"];
+            println!("Key: {}, Val: {}", key, &c["val"]);
             match &c["key"] {
                 "Class" => question.class = (c["val"]).to_string(),
                 "Section" => question.section = (c["val"]).to_string(),
@@ -29,6 +30,7 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
             }
         }
         else {
+            println!("~~~");
             question_vec.push(question.clone());
             question = Default::default();
         }
