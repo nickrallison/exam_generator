@@ -1,0 +1,9 @@
+Section: 21
+Q: 1
+Text: Figure 21-11 shows four situations in which five charged particles are evenly spaced along an axis. The charge values are indicated except for the central particle, which has the same charge in all four situations. Rank the situations according to the magnitude of the net electrostatic force on the central particle, greatest first.
+imgpath: assets/Halliday_21.1
+~
+Section: 21
+Q: 2
+Text: Figure 21-11 shows four situations in which five charged particles are evenly spaced along an axis. The charge values are indicated except for the central particle, which has the same charge in all four situations. Rank the situations according to the magnitude of the net electrostatic force on the central particle, greatest first.
+imgpath: assets/Halliday_21.2
