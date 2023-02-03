@@ -18,7 +18,7 @@ pub fn make_latex_file(tex_out_path: String, tex_template_path: String, question
         questions_tex.push_str("\\addpoints\n");
         questions_tex.push_str("\\question[10] ");
         questions_tex.push_str(&(question.text));
-        if question.image_number > 0 {
+        if question.figure_type != "None" {
             /*
             \begin{figure}[H]
             \centering
