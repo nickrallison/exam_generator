@@ -4,4 +4,4 @@
 *.pdf
 *.log
 *.aux
-Cargo.lock
+/Cargo.lock
