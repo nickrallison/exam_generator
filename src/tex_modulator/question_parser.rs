@@ -1,12 +1,15 @@
 use std::fs;
 use regex::Regex;
+use rand::prelude::*;
+use rand_chacha::ChaCha8Rng;
 
-pub fn parse_questions(file_path: String) -> Vec<Question> {
+pub fn parse_questions(file_path: String, seed: u64) -> Vec<Question> {
     let contents = fs::read_to_string(file_path)
     .expect("Should have been able to read the question input text file");
     
     let regex_key_value = Regex::new(r"^(?P<key>([^:]+))[:][ ](?P<val>([^:]+))$").unwrap(); 
 	let regex_four_space_indent = Regex::new(r"^[^\S\t\n\r]{4}(?P<key>([^:]+))[:][ ](?P<val>([^:]+))$").unwrap(); 
+    let regex_tuple = Regex::new(r"\((?P<x>(-?\d*\.?\d*)), (?P<y>(-?\d*\.?\d*))\)").unwrap(); 
     // Looks like a nightmare but captures each key/value pair in the input file
     
     let mut question: Question = Default::default();
@@ -22,7 +25,7 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
             match &c["key"] {
                 "Class" => question.class = (c["val"]).to_string(),
                 "Section" => question.section = (c["val"]).to_string(),
-                "Text" => question.text = insert_value(c["val"].to_string(), ranges),
+                "Text" => question.text = insert_values(&c["val"], &regex_tuple, seed),
                 "ID" => question.id = (c["val"]).to_string().parse::<u32>().unwrap(),
                 "Figure" => question.figure_type = (c["val"]).to_string(),
                 "Source" => question.source = (c["val"]).to_string(),
@@ -42,8 +45,35 @@ pub fn parse_questions(file_path: String) -> Vec<Question> {
     return question_vec;
 }
 
-fn insert_value(empty_question: String, range: (f64, f64)) {
 
+fn insert_values(empty_question: &str, regex: &Regex, seed: u64,) -> String {
+    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+    let mut q_holder: String = empty_question.to_string();
+    while (true) {
+        println!("{}", q_holder);
+        let mut val: f64;
+        if let Some(c) = regex.captures(&q_holder) {
+            let mut min = (&c["x"]).to_string().parse::<f64>().unwrap();
+            let mut max = (&c["y"]).to_string().parse::<f64>().unwrap();
+            if min > max {
+                let tmp = max;
+                max = min;
+                min = tmp;
+            }
+            val = rng.gen_range(min..max);
+            if min == min.round() && max == max.round() {
+                val = val.round();
+            }
+
+        }
+        else {
+            break;
+        }
+        q_holder = regex.replace(&q_holder, &val.to_string()).to_string();
+    }
+    
+    
+    return q_holder;
 }
 
 #[derive(Default, Clone)]

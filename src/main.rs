@@ -15,7 +15,8 @@ mod tex_modulator;
 
 
 fn main() {
+    let seed = 0xffee;
     let path_to_questions = "text/q.txt".to_string();
-    make_latex_file("tex/out.tex".to_string(), "tex/template_1.tex".to_string(), path_to_questions);
+    make_latex_file("tex/out.tex".to_string(), "tex/template_1.tex".to_string(), path_to_questions, seed);
     
 }

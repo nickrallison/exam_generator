@@ -8,17 +8,17 @@ mod question_parser;
 //  \question[10] |
 //  \newpage
 
-pub fn make_latex_file(tex_out_path: String, tex_template_path: String, questions_path: String) {
-    let tex_string = fs::read_to_string(tex_template_path)
+pub fn make_latex_file(tex_out_path: String, tex_template_path: String, questions_path: String, seed: u64) {
+    let tex_template = fs::read_to_string(tex_template_path)
     .expect("Should have been able to read the question input text file");
-    let questions = question_parser::parse_questions(questions_path);
+    let questions = question_parser::parse_questions(questions_path, seed);
     let mut questions_tex: String = "".to_string();
     println!("{}", questions.len());
     for question in questions {
         questions_tex.push_str("\\addpoints\n");
         questions_tex.push_str("\\question[10] ");
         questions_tex.push_str(&(question.text));
-        if question.figure_type != "None" {
+        if question.figure_type == "Image" {
             /*
             \begin{figure}[H]
             \centering
@@ -36,7 +36,8 @@ pub fn make_latex_file(tex_out_path: String, tex_template_path: String, question
         questions_tex.push_str("\n\\newpage\n");
         questions_tex.push_str("\n");
     }
-    let tex_out = str::replace(&tex_string, "~", &questions_tex);
+    let tex_questions = str::replace(&tex_template, "(Questions)", &questions_tex);
+    let tex_out = str::replace(&tex_questions, "(Seed)", &format!("{:08X}", seed));
     fs::write(tex_out_path, tex_out).expect("Unable to write file");
 
 }
