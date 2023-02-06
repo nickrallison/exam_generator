@@ -3,7 +3,7 @@ use regex::Regex;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
-pub fn parse_questions(file_path: String, seed: u64) -> Vec<Question> {
+pub fn parse_questions(file_path: String, rng: &mut ChaCha8Rng, num_qs: u32) -> Vec<Question> {
     let contents = fs::read_to_string(file_path)
     .expect("Should have been able to read the question input text file");
     
@@ -21,11 +21,10 @@ pub fn parse_questions(file_path: String, seed: u64) -> Vec<Question> {
         
 	    if let Some(c) = regex_key_value.captures(line) {
             let key = &c["key"];
-            println!("Key: {}, Val: {}", key, &c["val"]);
             match &c["key"] {
                 "Class" => question.class = (c["val"]).to_string(),
                 "Section" => question.section = (c["val"]).to_string(),
-                "Text" => question.text = insert_values(&c["val"], &regex_tuple, seed),
+                "Text" => question.text = insert_values(&c["val"], &regex_tuple, rng),
                 "ID" => question.id = (c["val"]).to_string().parse::<u32>().unwrap(),
                 "Figure" => question.figure_type = (c["val"]).to_string(),
                 "Source" => question.source = (c["val"]).to_string(),
@@ -34,23 +33,26 @@ pub fn parse_questions(file_path: String, seed: u64) -> Vec<Question> {
             }
         }
         else {
-            println!("~~~");
             question_vec.push(question.clone());
             question = Default::default();
         }
         line_num += 1;
-	}
+    }
     question_vec.push(question.clone());
+    let indices: Vec<u32> = gen_rand_non_matching(num_qs, question_vec.len().try_into().unwrap(), rng);
+    let mut questions_out: Vec<Question> = Vec::new();
+    for index in indices {
+        questions_out.push(question_vec[index as usize].clone());
+    }
 
-    return question_vec;
+
+    return questions_out;
 }
 
 
-fn insert_values(empty_question: &str, regex: &Regex, seed: u64,) -> String {
-    let mut rng = ChaCha8Rng::seed_from_u64(seed);
+fn insert_values(empty_question: &str, regex: &Regex, rng: &mut ChaCha8Rng) -> String {
     let mut q_holder: String = empty_question.to_string();
     while (true) {
-        println!("{}", q_holder);
         let mut val: f64;
         if let Some(c) = regex.captures(&q_holder) {
             let mut min = (&c["x"]).to_string().parse::<f64>().unwrap();
@@ -60,7 +62,7 @@ fn insert_values(empty_question: &str, regex: &Regex, seed: u64,) -> String {
                 max = min;
                 min = tmp;
             }
-            val = rng.gen_range(min..max);
+            val = (*rng).gen_range(min..max);
             if min == min.round() && max == max.round() {
                 val = val.round();
             }
@@ -74,6 +76,28 @@ fn insert_values(empty_question: &str, regex: &Regex, seed: u64,) -> String {
     
     
     return q_holder;
+}
+
+fn gen_rand_non_matching(num_qs: u32, question_bank_size: u32, rng: &mut ChaCha8Rng) -> Vec<u32> {
+
+    let mut rand_vec: Vec<u32> = Vec::new();
+    for i in 0..num_qs {
+        while true {
+            //let rand_instance = (*rng).gen_range(0..question_size);
+            let rand_index = (*rng).gen_range(0..question_bank_size);
+            let found =  (&rand_vec).into_iter().position(|r| r == &rand_index); 
+            match found {
+                None => {
+                    rand_vec.push(rand_index);
+                    break;
+                },
+                Some(_question_index) => {},
+            }
+            
+        }
+    }
+
+    return rand_vec;
 }
 
 #[derive(Default, Clone)]

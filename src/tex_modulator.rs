@@ -2,18 +2,20 @@ use regex::Regex;
 use std::fs;
 use question_parser::parse_questions;
 mod question_parser;
+use rand::prelude::*;
+use rand_chacha::ChaCha8Rng;
+
 
 // Basic question
 //  \addpoints
 //  \question[10] |
 //  \newpage
-
-pub fn make_latex_file(tex_out_path: String, tex_template_path: String, questions_path: String, seed: u64) {
+ 
+pub fn make_latex_file(tex_out_path: String, tex_template_path: String, questions_path: String, rng: &mut ChaCha8Rng, seed: u64, question_num: u32, class: String) {
     let tex_template = fs::read_to_string(tex_template_path)
     .expect("Should have been able to read the question input text file");
-    let questions = question_parser::parse_questions(questions_path, seed);
+    let questions = question_parser::parse_questions(questions_path, rng, question_num);
     let mut questions_tex: String = "".to_string();
-    println!("{}", questions.len());
     for question in questions {
         questions_tex.push_str("\\addpoints\n");
         questions_tex.push_str("\\question[10] ");
@@ -37,7 +39,8 @@ pub fn make_latex_file(tex_out_path: String, tex_template_path: String, question
         questions_tex.push_str("\n");
     }
     let tex_questions = str::replace(&tex_template, "(Questions)", &questions_tex);
-    let tex_out = str::replace(&tex_questions, "(Seed)", &format!("{:08X}", seed));
+    let tex_class = str::replace(&tex_questions, "(Class)", &class);
+    let tex_out = str::replace(&tex_class, "(Seed)", &format!("{:08X}", seed));
     fs::write(tex_out_path, tex_out).expect("Unable to write file");
 
 }
