@@ -3,56 +3,52 @@ use std::fs;
 use regex::Regex;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
+use rand::seq::SliceRandom;
+use std::convert::TryFrom;
 
 use serde::{Deserialize, Serialize};
 use serde_json::Result;
 
-#[derive(Serialize, Deserialize)]
-struct QuestionBank {
+#[derive(Serialize, Deserialize, Clone)]
+pub(crate) struct QuestionBank {
     classes: Vec<ClassQuestionBank>,
 }
-#[derive(Serialize, Deserialize)]
-struct ClassQuestionBank {
+#[derive(Serialize, Deserialize, Clone)]
+pub(crate) struct ClassQuestionBank {
+    class: String,
     units: Vec<UnitQuestionBank>,
 }
-#[derive(Serialize, Deserialize)]
-struct UnitQuestionBank {
+#[derive(Serialize, Deserialize, Clone)]
+pub(crate) struct UnitQuestionBank {
     questions: Vec<SingleQuestion>,
+    unit: String
 }
-#[derive(Serialize, Deserialize)]
-struct SingleQuestion {
-    question: String,
-    source: String
+#[derive(Serialize, Deserialize, Clone)]
+pub(crate) struct SingleQuestion {
+    pub question: String,
+    pub image_source: String,
+    pub source: String
 }
 
-pub fn parse_questions(file_path: String, rng: &mut ChaCha8Rng, num_qs: u32) -> Vec<Question> {
-    let contents = fs::read_to_string(file_path)
-    .expect("Should have been able to read the question input text file");
-    
-    let regex_key_value = Regex::new(r"^(?P<key>([^:]+))[:][ ](?P<val>([^:]+))$").unwrap(); 
-	let regex_four_space_indent = Regex::new(r"^[^\S\t\n\r]{4}(?P<key>([^:]+))[:][ ](?P<val>([^:]+))$").unwrap(); 
-    let regex_tuple = Regex::new(r"\((?P<x>(-?\d*\.?\d*)), (?P<y>(-?\d*\.?\d*))\)").unwrap(); 
-    // Looks like a nightmare but captures each key/value pair in the input file
-    let result = serde_json::from_str::<QuestionBank>(&contents);
-    let bank;
-    match result {
-        Ok(questionBank) => {
-            bank = questionBank;
-        },
-        Err(_) => {
-            panic!()
-        },
+pub(crate) fn parse_json(file_path: String) -> QuestionBank {
+    let contents = fs::read_to_string(file_path);
+    serde_json::from_str::<QuestionBank>(&contents
+        .expect("Should have been able to read the question input text file")
+    ).unwrap()
+}
+
+pub(crate) fn choose_questions(question_bank: QuestionBank, class: u32, units: Vec<(u32, u32)>, rng: &mut ChaCha8Rng) -> Vec<SingleQuestion> {
+    let mut questions_out: Vec<SingleQuestion> = Vec::new();
+    let class_index: usize = usize::try_from(class).unwrap();
+    for unit in units { //(unit, questions in unit)
+        let unit_index: usize = usize::try_from(unit.0).unwrap();
+        let indices: Vec<u32> = gen_rand_non_matching(unit.1, question_bank.classes[class_index].units[unit_index].questions.len().try_into().unwrap(), rng);
+        for index in indices {
+            let questions_index: usize = usize::try_from(index).unwrap();
+            questions_out.push(question_bank.classes[class_index].units[unit_index].questions[questions_index].clone());
+        }
     }
-
-    //questio
-    
-    let indices: Vec<u32> = gen_rand_non_matching(num_qs, question_vec.len().try_into().unwrap(), rng);
-    let mut questions_out: Vec<Question> = Vec::new();
-    for index in indices {
-        questions_out.push(question_vec[index as usize].clone());
-    }
-
-
+    questions_out.shuffle(rng);
     return questions_out;
 }
 
@@ -105,18 +101,7 @@ fn gen_rand_non_matching(num_qs: u32, question_bank_size: u32, rng: &mut ChaCha8
     }
 
     return rand_vec;
-}
-
-#[derive(Default, Clone)]
-pub struct Question {
-    pub class: String,
-    pub code: String,
-    pub section: String,
-    pub text: String,
-    pub source: String,
-    pub id: u32,
-    pub figure_type: String,
-}   
+} 
 
 
 
