@@ -1,5 +1,5 @@
-use tex_modulator::make_latex_file;
-mod tex_modulator;
+use tex_parser::make_latex_file;
+mod tex_parser;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 
