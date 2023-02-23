@@ -1,5 +1,5 @@
 use std::fs;
-use rand::{prelude::*, seq::index};
+use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 use rand::seq::SliceRandom;
 use regex::Regex;
@@ -109,7 +109,7 @@ fn fill_rand_values(questions: Vec<SingleQuestion>, rng: &mut ChaCha8Rng) -> Vec
 
     for (index, question) in questions.iter().enumerate() {
         for range in &question.ranges {
-            let val: RandGen = gen_rand_from_range(range.to_string());
+            let val: RandGen = gen_rand_from_range(range.to_string(), rng);
             match val {
                 RandGen::Float(val_f) => {
                     questions_filled[index].question = str::replace(&questions_filled[index].question, range, &val_f.to_string());
@@ -124,19 +124,19 @@ fn fill_rand_values(questions: Vec<SingleQuestion>, rng: &mut ChaCha8Rng) -> Vec
     return questions_filled;
 }
 
-fn gen_rand_from_range(range: String) -> RandGen {
+fn gen_rand_from_range(range: String, rng: &mut ChaCha8Rng) -> RandGen {
     let range_capture: regex::Regex = Regex::new(r"^\((?P<lower>(-?\d*\.?\d*)), (?P<upper>(-?\d*\.?\d*))\)$").unwrap();
     println!("{}", range);
     let cap = range_capture.captures(&range).unwrap();
     if range.contains(".") {
         let lower: f32 = cap["lower"].parse::<f32>().unwrap();
         let upper: f32 = cap["upper"].parse::<f32>().unwrap();
-        RandGen::Float(rand::thread_rng().gen_range(lower..upper))
+        RandGen::Float(rng.gen_range(lower..upper))
     }
     else {
         let lower: i32 = cap["lower"].parse::<i32>().unwrap();
         let upper: i32 = cap["upper"].parse::<i32>().unwrap();
-        RandGen::Int(rand::thread_rng().gen_range(lower..upper))
+        RandGen::Int(rng.gen_range(lower..upper))
     }
 }
 
@@ -151,7 +151,9 @@ fn parse_questions_to_tex(questions: Vec<SingleQuestion>) -> String {
 
             questions_tex.push_str("\\begin{figure}[H]\n");
             questions_tex.push_str("\\centering\n");
-            questions_tex.push_str("\\includegraphics[scale=0.8]{assets/");
+            questions_tex.push_str("\\includegraphics[scale=");
+            questions_tex.push_str(&question.image_scale);
+            questions_tex.push_str("]{assets/");
             questions_tex.push_str(&question.image_source);
             questions_tex.push_str(".png}\n");
             questions_tex.push_str("\\end{figure}");
