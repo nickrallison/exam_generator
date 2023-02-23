@@ -87,12 +87,6 @@ fn parse_questions_to_latex(questions: Vec<SingleQuestion>, tex_template: String
         questions_tex.push_str("\\question[10] ");
         questions_tex.push_str(&(question.question));
         if question.source != "none" {
-            /*
-            \begin{figure}[H]
-            \centering
-            \includegraphics[scale=1.5]{atom.png}
-            \end{figure}
-            */
 
             questions_tex.push_str("\\begin{figure}[H]\n");
             questions_tex.push_str("\\centering\n");
