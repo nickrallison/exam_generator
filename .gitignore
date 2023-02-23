@@ -1,6 +1,5 @@
 /target
 /tex/out.tex
-*.png
 *.pdf
 *.log
 *.aux
