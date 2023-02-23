@@ -21,5 +21,4 @@ fn main() {
     let path_to_questions = "text/question_bank.json".to_string();
     let class = "PHYS 259";
     make_latex_file("tex/out.tex".to_string(), "tex/template_1.tex".to_string(), path_to_questions, &mut rng, seed, question_num, class.to_string());
-    
 }
