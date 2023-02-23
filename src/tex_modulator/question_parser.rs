@@ -1,13 +1,10 @@
-use core::panic;
 use std::fs;
-use regex::Regex;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
 use rand::seq::SliceRandom;
 use std::convert::TryFrom;
 
 use serde::{Deserialize, Serialize};
-use serde_json::Result;
 
 #[derive(Serialize, Deserialize, Clone)]
 pub(crate) struct QuestionBank {
@@ -31,10 +28,8 @@ pub(crate) struct SingleQuestion {
 }
 
 pub(crate) fn parse_json(file_path: String) -> QuestionBank {
-    let contents = fs::read_to_string(file_path);
-    serde_json::from_str::<QuestionBank>(&contents
-        .expect("Should have been able to read the question input text file")
-    ).unwrap()
+    let contents = fs::read_to_string(file_path).unwrap();
+    serde_json::from_str(&contents).unwrap()
 }
 
 pub(crate) fn choose_questions(question_bank: QuestionBank, class: u32, units: Vec<(u32, u32)>, rng: &mut ChaCha8Rng) -> Vec<SingleQuestion> {
@@ -50,35 +45,6 @@ pub(crate) fn choose_questions(question_bank: QuestionBank, class: u32, units: V
     }
     questions_out.shuffle(rng);
     return questions_out;
-}
-
-
-fn insert_values(empty_question: &str, regex: &Regex, rng: &mut ChaCha8Rng) -> String {
-    let mut q_holder: String = empty_question.to_string();
-    while (true) {
-        let mut val: f64;
-        if let Some(c) = regex.captures(&q_holder) {
-            let mut min = (&c["x"]).to_string().parse::<f64>().unwrap();
-            let mut max = (&c["y"]).to_string().parse::<f64>().unwrap();
-            if min > max {
-                let tmp = max;
-                max = min;
-                min = tmp;
-            }
-            val = (*rng).gen_range(min..max);
-            if min == min.round() && max == max.round() {
-                val = val.round();
-            }
-
-        }
-        else {
-            break;
-        }
-        q_holder = regex.replace(&q_holder, &val.to_string()).to_string();
-    }
-    
-    
-    return q_holder;
 }
 
 fn gen_rand_non_matching(num_qs: u32, question_bank_size: u32, rng: &mut ChaCha8Rng) -> Vec<u32> {
