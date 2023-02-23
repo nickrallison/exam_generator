@@ -1,7 +1,29 @@
+use core::panic;
 use std::fs;
 use regex::Regex;
 use rand::prelude::*;
 use rand_chacha::ChaCha8Rng;
+
+use serde::{Deserialize, Serialize};
+use serde_json::Result;
+
+#[derive(Serialize, Deserialize)]
+struct QuestionBank {
+    classes: Vec<ClassQuestionBank>,
+}
+#[derive(Serialize, Deserialize)]
+struct ClassQuestionBank {
+    units: Vec<UnitQuestionBank>,
+}
+#[derive(Serialize, Deserialize)]
+struct UnitQuestionBank {
+    questions: Vec<SingleQuestion>,
+}
+#[derive(Serialize, Deserialize)]
+struct SingleQuestion {
+    question: String,
+    source: String
+}
 
 pub fn parse_questions(file_path: String, rng: &mut ChaCha8Rng, num_qs: u32) -> Vec<Question> {
     let contents = fs::read_to_string(file_path)
@@ -11,34 +33,19 @@ pub fn parse_questions(file_path: String, rng: &mut ChaCha8Rng, num_qs: u32) -> 
 	let regex_four_space_indent = Regex::new(r"^[^\S\t\n\r]{4}(?P<key>([^:]+))[:][ ](?P<val>([^:]+))$").unwrap(); 
     let regex_tuple = Regex::new(r"\((?P<x>(-?\d*\.?\d*)), (?P<y>(-?\d*\.?\d*))\)").unwrap(); 
     // Looks like a nightmare but captures each key/value pair in the input file
-    
-    let mut question: Question = Default::default();
-    
-    let mut line_num = 0;
-
-    let mut question_vec: Vec<Question> = Vec::new();
-    for line in contents.lines() {
-        
-	    if let Some(c) = regex_key_value.captures(line) {
-            let key = &c["key"];
-            match &c["key"] {
-                "Class" => question.class = (c["val"]).to_string(),
-                "Section" => question.section = (c["val"]).to_string(),
-                "Text" => question.text = insert_values(&c["val"], &regex_tuple, rng),
-                "ID" => question.id = (c["val"]).to_string().parse::<u32>().unwrap(),
-                "Figure" => question.figure_type = (c["val"]).to_string(),
-                "Source" => question.source = (c["val"]).to_string(),
-                "Course Code" => question.code =  (c["val"]).to_string(),
-                _ => panic!("Invalid Specifier: {}, at line {}\nDoes not match one of: Class, Course Code, Section, Text, ID, Images or Source", key, line_num+1),
-            }
-        }
-        else {
-            question_vec.push(question.clone());
-            question = Default::default();
-        }
-        line_num += 1;
+    let result = serde_json::from_str::<QuestionBank>(&contents);
+    let bank;
+    match result {
+        Ok(questionBank) => {
+            bank = questionBank;
+        },
+        Err(_) => {
+            panic!()
+        },
     }
-    question_vec.push(question.clone());
+
+    //questio
+    
     let indices: Vec<u32> = gen_rand_non_matching(num_qs, question_vec.len().try_into().unwrap(), rng);
     let mut questions_out: Vec<Question> = Vec::new();
     for index in indices {
