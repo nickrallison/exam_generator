@@ -93,12 +93,15 @@ class TexDocument:
         self.debugging = debugging
 
     def get_questions(self, class_name: str, questions_file: str, units: [str], questions_per_unit: [int]) -> None:
+        json_questions = input_json(questions_file)
+        
         if self.debugging:
             for (index, unit) in enumerate(units):
-                assert get_unit_length(questions_file, class_name, unit) >= questions_per_unit[index], f"More questions chosen: {questions_per_unit[index]}, than are contained in {unit}: {get_unit_length(questions_file, class_name, unit)}"
-
-            pass
-        json_questions = input_json(questions_file)
+                assert get_unit_length(json_questions, class_name, unit) >= questions_per_unit[index], f"More questions chosen: {questions_per_unit[index]}, than are contained in {unit}: {get_unit_length(questions_file, class_name, unit)}"
+            #assert
+            
+        # Generates random indices for questions & grabs those questions & appends them to the question list
+        # Also shuffles the list
         for (unit_index, unit) in enumerate(units):
             questions_chosen: [int] = rng.sample(range(get_unit_length(json_questions, class_name, unit)), questions_per_unit[unit_index])
             for question_index in questions_chosen:
