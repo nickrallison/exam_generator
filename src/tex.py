@@ -1,5 +1,7 @@
 from json_file_io import input_json, get_unit_length
 import random
+import os
+from typing import List, Set, Dict, Tuple
 
 class Config:
     spacing: str = "1"
@@ -18,7 +20,7 @@ class TexDocument:
     term: str = "Winter 2023"
     exam_identifier: str = "Midterm Exam"
     exam_date: str = "Today"
-    questions: [str] = [
+    questions: List[str] = [
         """\\addpoints
         \\question[10] Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to\begin{figure}[H]
         \\centering
@@ -55,16 +57,16 @@ class TexDocument:
         \\newpage"""
     ]
     header: str = """   
-        \\pagestyle\{head\}
-        \\firstpageheader\{\}\{\}\{\}
+        \\pagestyle{head}
+        \\firstpageheader{}{}{}
         \\runningheader{\\class}{\\examnum\\ - Page \\thepage\\ of \\numpages}{\\examdate}
         \\runningheadrule
         """
     num_questions: int = 3
-    catagories: [str] = ["Coulomb's Law"]
+    catagories: List[str] = ["Coulomb's Law"]
     seed: int = 0xFFFFFFFF
     preamble: str = """
-        \\documentclass[11pt]\{exam\}
+        \\documentclass[11pt]{exam}
         \\RequirePackage{amssymb, amsfonts, amsmath, latexsym, verbatim, xspace, setspace}
         \\RequirePackage{tikz, pgflibraryplotmarks}
         \\usepackage[margin=1in]{geometry}
@@ -83,30 +85,30 @@ class TexDocument:
         
         """
     config: Config = Config()
-    tex_folder: str = "../latex"
+    tex_folder: str = "latex"
 
-    rng: random = random.seed(seed)
+    random.seed(seed)
 
     debugging: bool = False
 
-    def __init__(self, text_folder: str, latex_folder: str):
+    def __init__(self, text_folder: str, latex_folder: str, debugging=False):
         self.debugging = debugging
 
-    def get_questions(self, class_name: str, questions_file: str, units: [str], questions_per_unit: [int]) -> None:
-        json_questions = input_json(questions_file)
+    def get_questions(self, class_name: str, questions_file: str, units: List[str], questions_per_unit: List[int]) -> None:
+        json_questions: dict = input_json(questions_file)
         
-        if self.debugging:
-            for (index, unit) in enumerate(units):
-                assert get_unit_length(json_questions, class_name, unit) >= questions_per_unit[index], f"More questions chosen: {questions_per_unit[index]}, than are contained in {unit}: {get_unit_length(questions_file, class_name, unit)}"
+        #if self.debugging:
+            #for (index, unit) in enumerate(units):
+                #assert get_unit_length(json_questions, class_name, unit) >= questions_per_unit[index], f"More questions chosen: {questions_per_unit[index]}, than are contained in {unit}: {get_unit_length(questions_file, class_name, unit)}"
             #assert
             
         # Generates random indices for questions & grabs those questions & appends them to the question list
         # Also shuffles the list
         for (unit_index, unit) in enumerate(units):
-            questions_chosen: [int] = rng.sample(range(get_unit_length(json_questions, class_name, unit)), questions_per_unit[unit_index])
+            questions_chosen: List[int] = random.sample(range(get_unit_length(json_questions, class_name, unit)), questions_per_unit[unit_index])
             for question_index in questions_chosen:
-                self.questions.append(format_questions(json_questions[class_name][unit][question_index]))
-        rng.shuffle(self.questions)
+                self.questions.append(self.format_questions(json_questions[class_name][unit][question_index]))
+        random.shuffle(self.questions)
         return
 
     def format_questions(self, question: dict) -> str:
@@ -126,7 +128,7 @@ class TexDocument:
 
     def format_document(self) -> str:
         document: str = ""
-        document += preamble
+        document += self.preamble
 
         if self.config.spacing == "1":
             document+="\\singlespacing"
@@ -140,24 +142,23 @@ class TexDocument:
         document+= """
             \\parindent \\parindentpaste
 
-            \\begin\{document\} 
+            \\begin{document} 
 
             \\headerpaste
 
             \\boilerplatepaste
 
-            \\begin\{questions\}
+            \\begin{questions}
 
             \\questionspaste
 
-            \\end\{questions\}
-            \\end\{document\}
+            \\end{questions}
+            \\end{document}
         """
+        return document
         
     def print_tex(self, file_name):
-
-        folder = Path(latex_folder)
-        latex_file = folder / file_name
-        f = open(latex_file)
+        latex_file = os.path.join(self.tex_folder, file_name)
+        f = open(latex_file, "w+")
         f.write(self.format_document())
         f.close()

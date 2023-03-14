@@ -1,105 +1,98 @@
 
 {
-    "classes": [
-        {
-            "class": "PHYS 259",
-            "units": [
-                {
-                    "unit": "Coulomb's Law",
-                    "questions": [
-                        {
-                            "question": "Figure 21-11 shows four situations in which five charged particles are evenly spaced along an axis. The charge values are indicated except for the central particle, which has the same charge in all four situations. Rank the situations according to the magnitude of the net electrostatic force on the central particle, greatest first.",
-                            "ranges": [
+    "PHYS 259": {
+        "Coulomb's Law": [
+            {
+                "question": "Figure 21-11 shows four situations in which five charged particles are evenly spaced along an axis. The charge values are indicated except for the central particle, which has the same charge in all four situations. Rank the situations according to the magnitude of the net electrostatic force on the central particle, greatest first.",
+                "ranges": [
 
-                            ],
-                            "image_source": "Halliday_ch21q1",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21q1",
-                            "marks": "10",
-                            "subparts": [
-                                
-                            ]
-                        },
-                        {
-                            "question": "Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to",
-                            "ranges": [
+                ],
+                "image_source": "Halliday_ch21q1",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21q1",
+                "marks": "10",
+                "subparts": [
+                    
+                ]
+            },
+            {
+                "question": "Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to",
+                "ranges": [
 
-                            ],
-                            "image_source": "Halliday_ch21q2",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21q2",
-                            "marks": "0",
-                            "subparts": [
-                                {
-                                    "item_marker": "(a)",
-                                    "question": "the magnitude of the charge transferred during touching and",
-                                    "marks": "5"
-                                },
-                                {
-                                    "item_marker": "(b)",
-                                    "question": "the charge left on the positively charged sphere, greatest first.",
-                                    "marks": "5"
-                                }
-                            ]
-                        },
-                        {
-                            "question": "Figure 21-13 shows four situations in which charged particles are fixed in place on an axis. In which situations is there a point to the left of the particles where an electron will be in equilibrium?",
-                            "ranges": [
+                ],
+                "image_source": "Halliday_ch21q2",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21q2",
+                "marks": "0",
+                "subparts": [
+                    {
+                        "item_marker": "(a)",
+                        "question": "the magnitude of the charge transferred during touching and",
+                        "marks": "5"
+                    },
+                    {
+                        "item_marker": "(b)",
+                        "question": "the charge left on the positively charged sphere, greatest first.",
+                        "marks": "5"
+                    }
+                ]
+            },
+            {
+                "question": "Figure 21-13 shows four situations in which charged particles are fixed in place on an axis. In which situations is there a point to the left of the particles where an electron will be in equilibrium?",
+                "ranges": [
 
-                            ],
-                            "image_source": "Halliday_ch21q3",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21q3",
-                            "marks": "10",
-                            "subparts": [
-                                
-                            ]
-                        },
-                        {
-                            "question": "Figure 21-14 shows two charged particles on an axis. The charges are free to move. However, a third charged particle can be placed at a certain point such that all three particles are then in equilibrium. (a) Is that point to the left of the first two particles, to their right, or between them? (b) Should the third particle be positively or negatively charged? (c)  Is the equilibrium stable or unstable?",
-                            "ranges": [
+                ],
+                "image_source": "Halliday_ch21q3",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21q3",
+                "marks": "10",
+                "subparts": [
+                    
+                ]
+            },
+            {
+                "question": "Figure 21-14 shows two charged particles on an axis. The charges are free to move. However, a third charged particle can be placed at a certain point such that all three particles are then in equilibrium. (a) Is that point to the left of the first two particles, to their right, or between them? (b) Should the third particle be positively or negatively charged? (c)  Is the equilibrium stable or unstable?",
+                "ranges": [
 
-                            ],
-                            "image_source": "Halliday_ch21q4",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21q4",
-                            "marks": "10",
-                            "subparts": [
-                                
-                            ]
-                        },
-                        {
-                            "question": "In Fig. 21-15, a central particle of charge -q is surrounded by two circular rings of charged particles. What are the magnitude and direction of the net electrostatic force on the central particle due to the other particles? (Hint - Consider symmetry.)",
-                            "ranges": [
+                ],
+                "image_source": "Halliday_ch21q4",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21q4",
+                "marks": "10",
+                "subparts": [
+                    
+                ]
+            },
+            {
+                "question": "In Fig. 21-15, a central particle of charge -q is surrounded by two circular rings of charged particles. What are the magnitude and direction of the net electrostatic force on the central particle due to the other particles? (Hint - Consider symmetry.)",
+                "ranges": [
 
-                            ],
-                            "image_source": "Halliday_ch21q5",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21q5",
-                            "marks": "10",
-                            "subparts": [
-                                
-                            ]
-                        },
-                        {
-                            "question": "In Fig. 21-26, particle 1 of charge (-7.0, -1.0)$\\mu$ C and particle  2 of charge (1, 20)$\\mu$ C are held at separation L = (10, 400) cm on an x axis. If particle 3 of unknown charge q3 is to be located such that the net electrostatic force on it from particles 1 and 2 is zero, what must be the (a) x and (b) y coordinates of particle 3?",
-                            "ranges": [
-                                "(-7.0, -1.0)",
-                                "(1, 20)",
-                                "(10, 400)"
-                            ],
-                            "image_source": "Halliday_ch21p13",
-                            "image_scale": "0.8",
-                            "source": "Halliday_ch21p13",
-                            "marks": "10",
-                            "subparts": [
-                                
-                            ]
-                            
-                        }
-                    ]
-                }
-            ]
-        }
-    ]
+                ],
+                "image_source": "Halliday_ch21q5",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21q5",
+                "marks": "10",
+                "subparts": [
+                    
+                ]
+            },
+            {
+                "question": "In Fig. 21-26, particle 1 of charge (-7.0, -1.0)$\\mu$ C and particle  2 of charge (1, 20)$\\mu$ C are held at separation L = (10, 400) cm on an x axis. If particle 3 of unknown charge q3 is to be located such that the net electrostatic force on it from particles 1 and 2 is zero, what must be the (a) x and (b) y coordinates of particle 3?",
+                "ranges": [
+                    "(-7.0, -1.0)",
+                    "(1, 20)",
+                    "(10, 400)"
+                ],
+                "image_source": "Halliday_ch21p13",
+                "image_scale": "0.8",
+                "source": "Halliday_ch21p13",
+                "marks": "10",
+                "subparts": [
+                    
+                ]
+                
+            }
+        ]
+    }
+    
 }
