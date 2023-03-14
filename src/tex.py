@@ -19,43 +19,10 @@ class TexDocument:
     school_class: str = "PHYS 259"
     term: str = "Winter 2023"
     exam_identifier: str = "Midterm Exam"
+    time_limit: str = "50 Minutes"
     exam_date: str = "Today"
-    questions: List[str] = [
-        """\\addpoints
-        \\question[10] Figure 21-12 shows three pairs of identical spheres that are to be touched together and then separated. The initial charges on them are indicated. Rank the pairs according to\begin{figure}[H]
-        \\centering
-        \\includegraphics[scale=0.8]{assets/Halliday_ch21q2.png}
-        \\end{figure}
-        \\newpage""",
-
-        """\\addpoints
-        \\question[10] In Fig. 21-26, particle 1 of charge -3.453011$\mu$ C and particle  2 of charge 3$\mu$ C are held at separation L = 211 cm on an x axis. If particle 3 of unknown charge q3 is to be located such that the net electrostatic force on it from particles 1 and 2 is zero, what must be the (a) x and (b) y coordinates of particle 3?\begin{figure}[H]
-        \\centering
-        \\includegraphics[scale=0.8]{assets/Halliday_ch21p13.png}
-        \\end{figure}
-        \\newpage""",
-
-        """\\addpoints
-        \\question[10] In Fig. 21-15, a central particle of charge -q is surrounded by two circular rings of charged particles. What are the magnitude and direction of the net electrostatic force on the central particle due to the other particles? (Hint - Consider symmetry.)\begin{figure}[H]
-        \\centering
-        \\includegraphics[scale=0.8]{assets/Halliday_ch21q5.png}
-        \\end{figure}
-        \\newpage""",
-
-        """\\addpoints
-        \\question[10] Figure 21-14 shows two charged particles on an axis. The charges are free to move. However, a third charged particle can be placed at a certain point such that all three particles are then in equilibrium. (a) Is that point to the left of the first two particles, to their right, or between them? (b) Should the third particle be positively or negatively charged? (c)  Is the equilibrium stable or unstable?\begin{figure}[H]
-        \\centering
-        \\includegraphics[scale=0.8]{assets/Halliday_ch21q4.png}
-        \\end{figure}
-        \\newpage""",
-
-        """\addpoints
-        \\question[10] Figure 21-13 shows four situations in which charged particles are fixed in place on an axis. In which situations is there a point to the left of the particles where an electron will be in equilibrium?\begin{figure}[H]
-        \\centering
-        \\includegraphics[scale=0.8]{assets/Halliday_ch21q3.png}
-        \\end{figure}
-        \\newpage"""
-    ]
+    boilerplate: str = "Boilerplate"
+    questions: List[str] = []
     header: str = """   
         \\pagestyle{head}
         \\firstpageheader{}{}{}
@@ -66,22 +33,22 @@ class TexDocument:
     catagories: List[str] = ["Coulomb's Law"]
     seed: int = 0xFFFFFFFF
     preamble: str = """
-        \\documentclass[11pt]{exam}
-        \\RequirePackage{amssymb, amsfonts, amsmath, latexsym, verbatim, xspace, setspace}
-        \\RequirePackage{tikz, pgflibraryplotmarks}
-        \\usepackage[margin=1in]{geometry}
-        \\usepackage{float}
+\\documentclass[11pt]{exam}
+\\RequirePackage{amssymb, amsfonts, amsmath, latexsym, verbatim, xspace, setspace}
+\\RequirePackage{tikz, pgflibraryplotmarks}
+\\usepackage[margin=1in]{geometry}
+\\usepackage{float}
 
-        \\newcommand{\\class}{""" + school_class + """}
-        \\newcommand{\\term}{(Term)}
-        \\newcommand{\\examnum}{(E)}
-        \\newcommand{\\examdate}{Today}
-        \\newcommand{\\timelimit}{50 Minutes}
-        \\newcommand{\\seed}{(Seed)}
-        \\newcommand{\\questionspaste}{(Questions)}
-        \\newcommand{\\headerpaste}{(Header)}
-        \\newcommand{\\boilerplatepaste}{(Boilerplate)}
-        \\newcommand{\\parindentpaste}{0ex}
+\\newcommand{\\class}{(Class)}
+\\newcommand{\\term}{(Term)}
+\\newcommand{\\examnum}{(Exam Num)}
+\\newcommand{\\examdate}{(Date)}
+\\newcommand{\\timelimit}{(Time Limit)}
+\\newcommand{\\seed}{(Seed)}
+\\newcommand{\\questionspaste}{(Questions)}
+\\newcommand{\\headerpaste}{(Header)}
+\\newcommand{\\boilerplatepaste}{(Boilerplate)}
+\\newcommand{\\parindentpaste}{0ex}
         
         """
     config: Config = Config()
@@ -113,15 +80,14 @@ class TexDocument:
 
     def format_questions(self, question: dict) -> str:
         question_text = """
-        \\addpoints
-        \\(Question)
+\\addpoints
         """
         if "image_source" in question:
             question_text+="""
-                \\begin{figure}[H]\n
-                \\centering
-                \\includegraphics[scale="""+question["image_scale"]+"""]{(Image)}    
-                \\end{figure}
+\\begin{figure}[H]\n
+\\centering
+\\includegraphics[scale="""+question["image_scale"]+"""]{(Image)}    
+\\end{figure}
                 """
         question_text+=self.config.question_spacer
         return question_text
@@ -155,6 +121,20 @@ class TexDocument:
             \\end{questions}
             \\end{document}
         """
+        questions_temp = ""
+        for question in self.questions:
+            questions_temp += question
+            questions_temp += "\n"
+
+        document = document.replace("(Class)", self.school_class)
+        document = document.replace("(Term)", self.term)
+        document = document.replace("(Exam Num)", self.exam_identifier)
+        document = document.replace("(Date)", "Today")
+        document = document.replace("(Time Limit)", self.time_limit)
+        document = document.replace("(Seed)", "0xFFFFFF")
+        document = document.replace("(Questions)", questions_temp)
+        document = document.replace("(Header)", self.header)
+        document = document.replace("(Boilerplate)", self.boilerplate)
         return document
         
     def print_tex(self, file_name):
