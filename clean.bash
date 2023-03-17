@@ -1,3 +1,1 @@
-rm -rf latex/*.log
-rm -rf latex/*.aux
-rm -rf latex/out.tex
+rm -rf latex/*.log && rm -rf latex/*.aux && rm -rf latex/out.tex

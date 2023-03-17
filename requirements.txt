@@ -1,0 +1,6 @@
+# Python:
+mypy
+
+# OS;
+# latexpdf
+

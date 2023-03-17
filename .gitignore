@@ -5,4 +5,5 @@
 *.aux
 /Cargo.lock
 *.tex
-src/__pycache__/tex.cpython-38.pyc
+src/__pycache__
+/.mypy_cache
