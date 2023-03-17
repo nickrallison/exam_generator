@@ -22,7 +22,63 @@ class TexDocument:
     exam_identifier: str = "Midterm Exam"
     time_limit: str = "50 Minutes"
     exam_date: str = "Today"
-    boilerplate: str = "Boilerplate"
+    boilerplate: str = """
+\\begin{flushright}
+\\begin{tabular}{p{2.8in} r l}
+\\textbf{\class} & \\textbf{Name (Print):} & \makebox[2in]{\hrulefill}\\\\
+\\textbf{\term} &&\\\\
+\\textbf{\examnum} &&\\\\
+\\textbf{\examdate} &&\\\\
+\\textbf{Time Limit: \\timelimit} & Teaching Assistant & \\makebox[2in]{\\hrulefill}
+\\end{tabular}\\
+\\end{flushright}
+\\rule[1ex]{\\textwidth}{.1pt}
+
+
+This exam contains \\numpages\ pages (including this cover page) and
+\\numquestions\\ problems.  Check to see if any pages are missing.  Enter
+all requested information on the top of this page, and put your initials
+on the top of every page, in case the pages become separated.\\\\
+
+You may \\textit{not} use your books, notes, or any calculator on this exam.\\\\
+
+You are required to show your work on each problem on this exam.  The following rules apply:\\\\
+
+\\begin{minipage}[t]{3.7in}
+\\vspace{0pt}
+\\begin{itemize}
+
+\\item \\textbf{If you use a ``fundamental theorem'' you must indicate this} and explain
+why the theorem may be applied.
+
+\\item \\textbf{Organize your work}, in a reasonably neat and coherent way, in
+the space provided. Work scattered all over the page without a clear ordering will 
+receive very little credit.  
+
+\\item \\textbf{Mysterious or unsupported answers will not receive full
+credit}.  A correct answer, unsupported by calculations, explanation,
+or algebraic work will receive no credit; an incorrect answer supported
+by substantially correct calculations and explanations might still receive
+partial credit.
+
+
+\\item If you need more space, use the back of the pages; clearly indicate when you have done this.
+\\end{itemize}
+
+Do not write in the table to the right.
+\\end{minipage}
+\\hfill
+\\begin{minipage}[t]{2.3in}
+\\vspace{0pt}
+%\\cellwidth{3em}
+\\gradetablestretch{2}
+\\vqword{Problem}
+\\addpoints \% required here by exam.cls, even though questions haven't started yet.	
+\\gradetable[v]%[pages]  % Use [pages] to have grading table by page instead of question
+
+\\end{minipage}
+\\newpage \% End of cover page
+    """
     questions: List[str] = []
     header: str = """   
 \\pagestyle{head}
