@@ -1,9 +1,7 @@
-/target
 /tex/out.tex
 *.pdf
 *.log
 *.aux
-/Cargo.lock
 *.tex
 src/__pycache__
 /.mypy_cache
