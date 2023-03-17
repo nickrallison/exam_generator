@@ -6,7 +6,8 @@ from typing import List, Set, Dict, Tuple
 class Config:
     spacing: str = "1"
     font: float = 11
-    question_spacer: str = "\\newpage"
+    question_spacer: str = """
+\\newpage"""
 
     debugging: bool = False
 
@@ -24,10 +25,10 @@ class TexDocument:
     boilerplate: str = "Boilerplate"
     questions: List[str] = []
     header: str = """   
-        \\pagestyle{head}
-        \\firstpageheader{}{}{}
-        \\runningheader{\\class}{\\examnum\\ - Page \\thepage\\ of \\numpages}{\\examdate}
-        \\runningheadrule
+\\pagestyle{head}
+\\firstpageheader{}{}{}
+\\runningheader{\\class}{\\examnum\\ - Page \\thepage\\ of \\numpages}{\\examdate}
+\\runningheadrule
         """
     num_questions: int = 3
     catagories: List[str] = ["Coulomb's Law"]
@@ -48,9 +49,7 @@ class TexDocument:
 \\newcommand{\\questionspaste}{(Questions)}
 \\newcommand{\\headerpaste}{(Header)}
 \\newcommand{\\boilerplatepaste}{(Boilerplate)}
-\\newcommand{\\parindentpaste}{0ex}
-        
-        """
+\\newcommand{\\parindentpaste}{0ex}"""
     config: Config = Config()
     tex_folder: str = "latex"
 
@@ -81,12 +80,12 @@ class TexDocument:
     def format_questions(self, question: dict) -> str:
         question_text = """
 \\addpoints
-        """
+\\question """ + question["question"]
         if "image_source" in question:
             question_text+="""
 \\begin{figure}[H]\n
 \\centering
-\\includegraphics[scale="""+question["image_scale"]+"""]{(Image)}    
+\\includegraphics[scale="""+question["image_scale"]+"""]{""" + os.path.join("assets", question["image_source"]+".png") + """}    
 \\end{figure}
                 """
         question_text+=self.config.question_spacer
@@ -106,20 +105,20 @@ class TexDocument:
             document+="\\singlespacing"
 
         document+= """
-            \\parindent \\parindentpaste
+\\parindent \\parindentpaste
 
-            \\begin{document} 
+\\begin{document} 
 
-            \\headerpaste
+\\headerpaste
 
-            \\boilerplatepaste
+\\boilerplatepaste
 
-            \\begin{questions}
+\\begin{questions}
 
-            \\questionspaste
+\\questionspaste
 
-            \\end{questions}
-            \\end{document}
+\\end{questions}
+\\end{document}
         """
         questions_temp = ""
         for question in self.questions:
