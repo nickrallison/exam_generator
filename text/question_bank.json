@@ -77,7 +77,7 @@
                 ]
             },
             {
-                "question": "In Fig. 21-26, particle 1 of charge (-7.0, -1.0)$\\mu$ C and particle  2 of charge (1, 20)$\\mu$ C are held at separation L = (10, 400) cm on an x axis. If particle 3 of unknown charge q3 is to be located such that the net electrostatic force on it from particles 1 and 2 is zero, what must be the (a) x and (b) y coordinates of particle 3?",
+                "question": "In Fig. 21-26, particle 1 of charge (-7.0, -1.0)$\\mu$C and particle  2 of charge (1, 20)$\\mu$ C are held at separation L = (10, 400)cm on an x axis. If particle 3 of unknown charge q3 is to be located such that the net electrostatic force on it from particles 1 and 2 is zero, what must be the (a) x and (b) y coordinates of particle 3?",
                 "ranges": [
                     "(-7.0, -1.0)",
                     "(1, 20)",
