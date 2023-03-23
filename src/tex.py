@@ -1,6 +1,7 @@
 from json_file_io import input_json, get_unit_length
 import random
 import os
+import math
 import re
 from typing import List, Set, Dict, Tuple
 
@@ -28,23 +29,28 @@ class TexDocument:
     header: str = ""
     num_questions: int = 3
     catagories: List[str] = ["Coulomb's Law"]
-    seed: int = 0xFFFFFFFF
+    seed: int = 0
     preamble: str = ""
     config: Config = Config()
     tex_folder: str = "latex"
 
-    random.seed(seed)
-
     debugging: bool = False
 
-    def __init__(self, text_folder: str, latex_folder: str, debugging=False):
+    def __init__(self, text_folder: str, latex_folder: str, seed: int, debugging=False):
         self.debugging = debugging
+
         with open(os.path.join(latex_folder, "boilerplate.tex"), 'r') as file:
             self.boilerplate = file.read()
         with open(os.path.join(latex_folder, "header.tex"), 'r') as file:
             self.header = file.read()
         with open(os.path.join(latex_folder, "preamble.tex"), 'r') as file:
             self.preamble = file.read()
+
+        self.seed = seed
+        self.tex_folder = latex_folder 
+        self.text_folder = text_folder
+
+        random.seed(seed)
 
     def get_questions(self, class_name: str, questions_file: str, units: List[str], questions_per_unit: List[int]) -> None:
         json_questions: dict = input_json(questions_file)
@@ -57,19 +63,28 @@ class TexDocument:
         
         regex =  r"\((?P<min>-?\d*\.?\d*), (?P<max>-?\d*\.?\d*)\)"
 
-        for question in self.questions:
-            result = re.search(regex, question)
-            if result != None:
-                print(float(result.group("min")))
-                print(float(result.group("max")))
+        for (index, question) in enumerate(self.questions):
+            result = re.search(regex, self.questions[index])
+
+            while result != None:
+                decimals = 0
+                decimals_regex = r"\d(\.(?P<decimals>\d+))?"
+                decimals_result = re.search(decimals_regex, result.group("min"))
+                if decimals_result.group("decimals") != None:
+                    decimals = len(decimals_result.group("decimals"))
+                min = float(result.group("min"))
+                max = float(result.group("max"))
+                val = round(random.uniform(min, max), decimals)
+                print(decimals)
+                if decimals == 0:
+                    val = round(val)
+
+                self.questions[index] = re.sub(regex, str(val), self.questions[index], count=1)
+                result = re.search(regex, self.questions[index])
+
+
 
         return
-
-    # def questions_replace(self, document: str) -> str:
-    #     regex = "\((?P<min>-?\d*\.?\d*), (?P<max>-?\d*\.?\d*)\)"
-    #     m = re.findall(pattern, string)(document, regex)
-    #     print(m)
-    #     return ""
 
     def format_questions(self, question: dict) -> str:
         question_text = """
@@ -124,7 +139,7 @@ class TexDocument:
         document = document.replace("(Exam Num)", self.exam_identifier)
         document = document.replace("(Date)", "Today")
         document = document.replace("(Time Limit)", self.time_limit)
-        document = document.replace("(Seed)", "0xFFFFFF")
+        document = document.replace("(Seed)", "0x{:08X}".format(self.seed))
         document = document.replace("(Questions)", questions_temp)
         document = document.replace("(Header)", self.header)
         document = document.replace("(Boilerplate)", self.boilerplate)

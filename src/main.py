@@ -2,12 +2,13 @@ from tex import TexDocument
 import os
 
 def main(debugging=False):
-    doc = TexDocument("text", "latex")
+    seed = 0x00F0F0F0
+    doc = TexDocument("text", "latex", seed)
     doc.get_questions("PHYS 259", "question_bank.json", ["Coulomb's Law"], [3])
     doc.print_tex("out.tex")
 
     print_cmd = "pdflatex -output-directory=latex  latex/out.tex"
-    #returned_value_print = os.system(print_cmd)  # returns the exit code in unix
+    returned_value_print = os.system(print_cmd)  # returns the exit code in unix
 
     #if (not debugging):
     #clean_cmd = "rm -rf latex/*.log && rm -rf latex/*.aux && rm -rf latex/out.tex"
