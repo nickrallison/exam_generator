@@ -26,7 +26,7 @@ class TexDocument:
 \\begin{flushright}
 \\begin{tabular}{p{2.8in} r l}
 \\textbf{\class} & \\textbf{Name (Print):} & \makebox[2in]{\hrulefill}\\\\
-\\textbf{\term} &&\\\\
+\\textbf{\\term} &&\\\\
 \\textbf{\examnum} &&\\\\
 \\textbf{\examdate} &&\\\\
 \\textbf{Time Limit: \\timelimit} & Teaching Assistant & \\makebox[2in]{\\hrulefill}
@@ -73,8 +73,9 @@ Do not write in the table to the right.
 %\\cellwidth{3em}
 \\gradetablestretch{2}
 \\vqword{Problem}
-\\addpoints \% required here by exam.cls, even though questions haven't started yet.	
-\\gradetable[v]%[pages]  % Use [pages] to have grading table by page instead of question
+\\addpoints % required here by exam.cls, even though questions haven't started yet.	
+\\gradetable[v]%[pages]  
+% Use [pages] to have grading table by page instead of question
 
 \\end{minipage}
 \\newpage \% End of cover page

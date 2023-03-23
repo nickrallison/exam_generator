@@ -10,12 +10,12 @@ def main(debugging=False):
     returned_value_print = os.system(print_cmd)  # returns the exit code in unix
 
     #if (not debugging):
-    clean_cmd = "rm -rf latex/*.log && rm -rf latex/*.aux && rm -rf latex/out.tex"
-    returned_value_clean = os.system(clean_cmd)  # returns the exit code in unix
+    #clean_cmd = "rm -rf latex/*.log && rm -rf latex/*.aux && rm -rf latex/out.tex"
+    #returned_value_clean = os.system(clean_cmd)  # returns the exit code in unix
 
     if debugging:
         print('exit code for latex print:', returned_value_print)
-        print('exit code for latex clean:', returned_value_clean)
+        #print('exit code for latex clean:', returned_value_clean)
     pass
 
 if __name__ == '__main__':
