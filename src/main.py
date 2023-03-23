@@ -7,7 +7,7 @@ def main(debugging=False):
     doc.print_tex("out.tex")
 
     print_cmd = "pdflatex -output-directory=latex  latex/out.tex"
-    returned_value_print = os.system(print_cmd)  # returns the exit code in unix
+    #returned_value_print = os.system(print_cmd)  # returns the exit code in unix
 
     #if (not debugging):
     #clean_cmd = "rm -rf latex/*.log && rm -rf latex/*.aux && rm -rf latex/out.tex"

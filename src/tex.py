@@ -54,6 +54,15 @@ class TexDocument:
             for question_index in questions_chosen:
                 self.questions.append(self.format_questions(json_questions[class_name][unit][question_index]))
         random.shuffle(self.questions)
+        
+        regex =  r"\((?P<min>-?\d*\.?\d*), (?P<max>-?\d*\.?\d*)\)"
+
+        for question in self.questions:
+            result = re.search(regex, question)
+            if result != None:
+                print(float(result.group("min")))
+                print(float(result.group("max")))
+
         return
 
     # def questions_replace(self, document: str) -> str:
